@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>{{ tutor.full_name }}</title>
+
+<link rel="stylesheet"
+href="{{ url_for('static',filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+<div class="application">
+
+<img
+src="{{ url_for('uploaded_file', folder='photos', filename=tutor.profile_photo) }}"
+class="tutorPhoto">
+
+<h1>{{ tutor.full_name }}</h1>
+
+<h3>{{ tutor.subject }}</h3>
+
+<p>{{ tutor.bio }}</p>
+
+<p><b>Province:</b> {{ tutor.province }}</p>
+
+<p><b>City:</b> {{ tutor.city }}</p>
+
+<p><b>Teaching:</b> {{ tutor.teaching_mode }}</p>
+
+<p><b>Experience:</b> {{ tutor.experience }} Years</p>
+
+<p><b>Qualification:</b> {{ tutor.qualification }}</p>
+
+<p><b>Rate:</b> R{{ tutor.hourly_rate }}/hour</p>
+
+<p>
+
+⭐ {{ tutor.rating }}
+
+({{ tutor.total_reviews }} Reviews)
+
+</p>
+
+<a href="/book/{{ tutor.id }}">
+
+<h2>Availability</h2>
+
+{% if availability %}
+
+<table>
+
+<tr>
+
+<th>Day</th>
+
+<th>From</th>
+
+<th>To</th>
+
+</tr>
+
+{% for slot in availability %}
+
+<tr>
+
+<td>{{ slot.day }}</td>
+
+<td>{{ slot.start_time }}</td>
+
+<td>{{ slot.end_time }}</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+{% else %}
+
+<p>This tutor has not added availability yet.</p>
+
+{% endif %}
+
+<button>
+
+Book Lesson
+
+</button>
+
+</a>
+
+<hr>
+
+<h2>Student Reviews</h2>
+
+{% for review in reviews %}
+
+<div class="card">
+
+<h3>{{ review.student_name }}</h3>
+
+<p>
+
+⭐ {{ review.rating }}/5
+
+</p>
+
+<p>
+
+{{ review.review }}
+
+</p>
+
+</div>
+
+{% endfor %}
+
+{% if reviews|length==0 %}
+
+<p>No reviews yet.</p>
+
+{% endif %}
+
+</div>
+
+</body>
+
+</html>

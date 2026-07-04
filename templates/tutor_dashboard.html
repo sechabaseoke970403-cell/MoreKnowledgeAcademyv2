@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Tutor Dashboard</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+<nav>
+
+    <div class="logo">
+        Tutor Dashboard
+    </div>
+
+    <div class="menu">
+
+        <a href="/tutor-dashboard">Dashboard</a>
+
+        <a href="/tutor-profile">My Profile</a>
+
+        <a href="/tutor-bookings">My Bookings</a>
+
+        <a href="/tutor-availability">My Availability</a>
+
+        <a href="/tutor-earnings">My Earnings</a>
+
+        <a href="/tutor-logout">Logout</a>
+
+    </div>
+
+</nav>
+
+<div class="application">
+
+    <img
+    src="{{ url_for('uploaded_file', folder='photos', filename=tutor.profile_photo) }}"
+    class="tutorPhoto">
+
+    <h2>{{ tutor.full_name }}</h2>
+
+    <p><strong>Subject:</strong> {{ tutor.subject }}</p>
+
+    <p><strong>Province:</strong> {{ tutor.province }}</p>
+
+    <p><strong>City:</strong> {{ tutor.city }}</p>
+
+    <p><strong>Teaching Mode:</strong> {{ tutor.teaching_mode }}</p>
+
+    <p><strong>Hourly Rate:</strong> R{{ tutor.hourly_rate }}</p>
+
+    <p><strong>Bio:</strong></p>
+
+    <p>{{ tutor.bio }}</p>
+
+    <br>
+
+    <a href="/tutor-profile">
+        <button>Edit Profile</button>
+    </a>
+
+    <a href="/tutor-bookings">
+        <button>View Lesson Requests</button>
+    </a>
+
+    <a href="/tutor-availability">
+        <button>Manage Availability</button>
+    </a>
+
+    <a href="/tutor-earnings">
+        <button>View Earnings</button>
+    </a>
+
+</div>
+
+</body>
+
+</html>

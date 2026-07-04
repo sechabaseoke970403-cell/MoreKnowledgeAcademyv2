@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<title>Platform Revenue</title>
+
+<link rel="stylesheet"
+href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+<div class="application">
+
+<h1>Platform Revenue</h1>
+
+<h2>Total Revenue</h2>
+
+<h1>R{{ total }}</h1>
+
+<hr>
+
+{% for booking in bookings %}
+
+<div class="card">
+
+<p>Tutor ID : {{ booking.tutor_id }}</p>
+
+<p>Student ID : {{ booking.student_id }}</p>
+
+<p>Subject : {{ booking.subject }}</p>
+
+<p>Amount : R{{ booking.lesson_price }}</p>
+
+<p>Date : {{ booking.lesson_date }}</p>
+
+</div>
+
+<hr>
+
+{% endfor %}
+
+</div>
+
+</body>
+
+</html>

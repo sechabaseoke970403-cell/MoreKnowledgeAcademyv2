@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Become a Tutor | MoreKnowledgeAcademy</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+<nav>
+
+    <div class="logo">
+        MoreKnowledgeAcademy
+    </div>
+
+    <div class="menu">
+
+        <a href="/">Home</a>
+        <a href="#">Find Tutor</a>
+        <a href="/apply">Become a Tutor</a>
+        <a href="/admin">Admin</a>
+
+    </div>
+
+</nav>
+
+<div class="application">
+
+    <h1>Become a Tutor</h1>
+
+    <p>
+        Complete the application form below. Our recruitment team will review your application before inviting you for an interview.
+    </p>
+
+    <form action="/apply" method="POST" enctype="multipart/form-data">
+
+        <h3>Personal Information</h3>
+
+        <input type="text"
+               name="full_name"
+               placeholder="Full Name"
+               required>
+
+        <input type="email"
+               name="email"
+               placeholder="Email Address"
+               required>
+
+        <input type="text"
+               name="phone"
+               placeholder="Phone Number"
+               required>
+
+        <input type="text"
+               name="province"
+               placeholder="Province"
+               required>
+
+        <input type="text"
+               name="city"
+               placeholder="City"
+               required>
+
+        <h3>Teaching Information</h3>
+
+        <select name="subject" required>
+
+            <option value="">Select Subject</option>
+
+            <option>Mathematics</option>
+            <option>Physical Sciences</option>
+            <option>Life Sciences</option>
+            <option>Accounting</option>
+            <option>English</option>
+            <option>Geography</option>
+            <option>History</option>
+            <option>Economics</option>
+
+        </select>
+
+        <label>Teaching Method</label>
+
+<select name="teaching_mode" required>
+
+    <option value="">Select Teaching Method</option>
+
+    <option value="Online">Online Only</option>
+
+    <option value="Contact">In-Person Only</option>
+
+    <option value="Both">Online & In-Person</option>
+
+</select>
+
+        <input type="text"
+               name="qualification"
+               placeholder="Highest Qualification"
+               required>
+
+        <input type="number"
+               name="experience"
+               placeholder="Years of Teaching Experience"
+               required>
+
+        <textarea
+            name="about"
+            placeholder="Tell us about yourself"
+            required></textarea>
+
+        <h3>Upload Documents</h3>
+
+        <label>Profile Picture</label>
+        <input type="file"
+               name="photo"
+               accept="image/*"
+               required>
+
+        <label>Curriculum Vitae (CV)</label>
+        <input type="file"
+               name="cv"
+               required>
+
+        <label>Qualification Certificate</label>
+        <input type="file"
+               name="qualification_file"
+               required>
+
+        <label>South African ID / Passport</label>
+        <input type="file"
+               name="id_document"
+               required>
+
+        <br><br>
+
+        <label>
+
+            <input type="checkbox" required>
+
+            I confirm that all information provided is correct.
+
+        </label>
+
+        <br><br>
+
+        <button type="submit">
+
+            Submit Application
+
+        </button>
+
+    </form>
+
+</div>
+
+</body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</html>s

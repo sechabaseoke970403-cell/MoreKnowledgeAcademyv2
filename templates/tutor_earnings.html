@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<title>Tutor Earnings</title>
+
+<link rel="stylesheet"
+href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+<div class="application">
+
+<h1>My Earnings</h1>
+
+<h2>Total Earnings</h2>
+
+<h1>R{{ total }}</h1>
+
+<hr>
+
+{% for booking in bookings %}
+
+<div class="card">
+
+<h3>{{ booking.subject }}</h3>
+
+<p>Date : {{ booking.lesson_date }}</p>
+
+<p>Time : {{ booking.lesson_time }}</p>
+
+<p>Amount : R{{ booking.lesson_price }}</p>
+
+<p>Status : {{ booking.payment_status }}</p>
+
+</div>
+
+<hr>
+
+{% endfor %}
+
+{% if bookings|length==0 %}
+
+<h2>No earnings yet.</h2>
+
+{% endif %}
+
+</div>
+
+</body>
+
+</html>

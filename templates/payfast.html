@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>Pay Lesson</title>
+
+</head>
+
+<body>
+
+<h2>Pay for Lesson</h2>
+
+<p>Tutor: {{ booking.full_name }}</p>
+
+<p>Amount: R{{ booking.hourly_rate }}</p>
+
+<form action="https://www.payfast.co.za/eng/process" method="post">
+
+    <input
+    type="hidden"
+    name="merchant_id"
+    value="12957097">
+
+    <input
+    type="hidden"
+    name="merchant_key"
+    value="pgcxs3ok7kf5o">
+
+   <input
+type="hidden"
+name="amount"
+value="{{ booking.hourly_rate }}">
+
+    <input
+    type="hidden"
+    name="item_name"
+    value="Lesson Booking">
+
+    <input
+    type="hidden"
+    name="custom_int1"
+    value="{{ booking.id }}">
+
+    <input
+    type="hidden"
+    name="return_url"
+    value="http://127.0.0.1:5000/payment-success/{{ booking.id }}">
+
+    <input
+    type="hidden"
+    name="cancel_url"
+    value="http://127.0.0.1:5000/payment-cancel">
+
+    <input
+    type="hidden"
+    name="notify_url"
+    value="http://127.0.0.1:5000/payfast-itn">
+
+    <button type="submit">
+        Pay Now
+    </button>
+
+</form>
+</body>
+
+</html>

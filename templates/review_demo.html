@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>Review Demo</title>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+<nav>
+
+<div class="logo">
+
+MoreKnowledgeAcademy Admin
+
+</div>
+
+</nav>
+
+<div class="application">
+
+<h1>Demo Lesson Review</h1>
+
+<p>
+
+<strong>{{ tutor.full_name }}</strong>
+
+</p>
+
+<p>
+
+<strong>Subject:</strong>
+
+{{ tutor.subject }}
+
+</p>
+
+<p>
+
+<a href="{{ tutor.demo_video_link }}" target="_blank">
+
+Open Demo Video
+
+</a>
+
+</p>
+
+<form method="POST">
+
+<label>Score /10</label>
+
+<input
+type="number"
+name="score"
+min="1"
+max="10"
+required>
+
+<label>Review Notes</label>
+
+<textarea
+name="review"
+required></textarea>
+
+<button type="submit">
+
+Approve Demo
+
+
+</button>
+
+</form>
+
+</div>
+
+</body>
+
+</html>

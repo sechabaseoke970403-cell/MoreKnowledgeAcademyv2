@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>Schedule Interview</title>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+<nav>
+
+<div class="logo">
+
+MoreKnowledgeAcademy Admin
+
+</div>
+
+<div class="menu">
+
+<a href="/dashboard">Dashboard</a>
+<a href="/admin/logout">Logout</a>
+
+</div>
+
+</nav>
+
+<div class="application">
+
+<h1>Schedule Interview</h1>
+
+<h2>{{ tutor.full_name }}</h2>
+
+<form method="POST">
+
+<label>Interview Date</label>
+
+<input
+type="date"
+name="interview_date"
+required>
+
+<label>Interview Time</label>
+
+<input
+type="time"
+name="interview_time"
+required>
+
+<label>Zoom Meeting Link</label>
+
+<input
+type="url"
+name="zoom_link"
+placeholder="https://zoom.us/j/..."
+required>
+
+<button type="submit">
+
+Schedule Interview
+
+</button>
+
+</form>
+
+</div>
+
+</body>
+
+</html>

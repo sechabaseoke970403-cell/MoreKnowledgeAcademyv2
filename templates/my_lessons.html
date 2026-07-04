@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<title>My Lessons</title>
+
+<link rel="stylesheet"
+href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+<div class="application">
+
+<h1>My Lessons</h1>
+
+{% if bookings %}
+
+{% for booking in bookings %}
+
+<div class="card">
+
+<h2>{{ booking.full_name }}</h2>
+
+<p><strong>Subject:</strong> {{ booking.subject }}</p>
+
+<p><strong>Date:</strong> {{ booking.lesson_date }}</p>
+
+<p><strong>Time:</strong> {{ booking.lesson_time }}</p>
+
+<p><strong>Booking Status:</strong> {{ booking.status }}</p>
+
+<p><strong>Payment:</strong> {{ booking.payment_status }}</p>
+
+{% if booking.meeting_link %}
+
+<a
+href="{{ booking.meeting_link }}"
+target="_blank">
+
+<button>
+
+Join Lesson
+
+</button>
+
+</a>
+
+{% else %}
+
+<p>
+
+Meeting link will appear after your tutor accepts the lesson.
+
+</p>
+
+{% endif %}
+
+</div>
+
+<br>
+
+{% endfor %}
+
+{% else %}
+
+<h3>No lessons booked yet.</h3>
+
+{% endif %}
+
+</div>
+
+</body>
+
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<title>Tutor Availability</title>
+
+<link rel="stylesheet"
+href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+<div class="application">
+
+<h1>My Availability</h1>
+
+<form method="POST">
+
+<select name="day" required>
+
+<option>Monday</option>
+<option>Tuesday</option>
+<option>Wednesday</option>
+<option>Thursday</option>
+<option>Friday</option>
+<option>Saturday</option>
+<option>Sunday</option>
+
+</select>
+
+<input
+type="time"
+name="start_time"
+required>
+
+<input
+type="time"
+name="end_time"
+required>
+
+<button type="submit">
+
+Add Availability
+
+</button>
+
+</form>
+
+<hr>
+
+{% for slot in availability %}
+
+<div class="card">
+
+<h3>{{ slot.day }}</h3>
+
+<p>{{ slot.start_time }} - {{ slot.end_time }}</p>
+
+</div>
+
+{% endfor %}
+
+</div>
+
+</body>
+
+</html>

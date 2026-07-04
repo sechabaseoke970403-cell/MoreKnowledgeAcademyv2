@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>Admin Dashboard</title>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+<nav>
+
+<div class="logo">
+
+MoreKnowledgeAcademy Admin
+
+</div>
+
+<div class="menu">
+
+<a href="/dashboard">Dashboard</a>
+<a href="/">Website</a>
+<a href="/admin/logout">Logout</a>
+
+</div>
+
+</nav>
+
+<div class="application">
+
+<h1>Tutor Applications</h1>
+
+<div class="stats">
+
+<div class="card">
+
+<h2>{{ pending }}</h2>
+
+<p>Pending</p>
+
+</div>
+
+<div class="card">
+
+<h2>{{ approved }}</h2>
+
+<p>Approved</p>
+
+</div>
+
+<div class="card">
+
+<h2>{{ interviews }}</h2>
+
+<p>Interviews</p>
+
+</div>
+
+<div class="card">
+
+<h2>{{ verified }}</h2>
+
+<p>Verified</p>
+
+</div>
+
+</div>
+
+<table>
+
+<tr>
+
+<th>ID</th>
+<th>Name</th>
+<th>Subject</th>
+<th>Status</th>
+<th>Stage</th>
+<th>Action</th>
+
+</tr>
+
+{% for tutor in tutors %}
+
+<tr>
+
+<td>{{ tutor.id }}</td>
+
+<td>{{ tutor.full_name }}</td>
+
+<td>{{ tutor.subject }}</td>
+
+<td>
+
+{% if tutor.status == "Pending" %}
+
+<span class="pending">
+
+Pending
+
+</span>
+
+{% elif tutor.status == "Approved" %}
+
+<span class="approved">
+
+Approved
+
+</span>
+
+{% elif tutor.status == "Rejected" %}
+
+<span class="rejected">
+
+Rejected
+
+</span>
+
+{% endif %}
+
+</td>
+
+<td>
+
+    
+
+{% if tutor.application_stage == "Applied" %}
+
+<span class="pending">Applied</span>
+
+{% elif tutor.application_stage == "Interview Scheduled" %}
+
+<span style="color:#2563eb;font-weight:bold;">
+Interview Scheduled
+</span>
+
+{% elif tutor.application_stage == "Demo Lesson Requested" %}
+
+<span style="color:#7c3aed;font-weight:bold;">
+Demo Requested
+</span>
+
+{% elif tutor.application_stage == "Demo Approved" %}
+
+<span style="color:green;font-weight:bold;">
+
+Demo Approved
+
+</span>
+
+{% elif tutor.application_stage == "Verified" %}
+
+<span class="approved">
+Verified
+</span>
+
+{% endif %}
+
+</td>
+
+<td>
+
+<a href="/application/{{ tutor.id }}">
+
+<button>
+
+Open
+
+</button>
+
+</a>
+
+</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+</div>
+
+<a href="/admin-revenue">
+
+<button>
+
+Platform Revenue
+
+</button>
+
+</a>
+
+</body>
+
+</html>

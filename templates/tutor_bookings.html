@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>Lesson Requests</title>
+
+<link rel="stylesheet"
+href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+<div class="application">
+
+<h1>Lesson Requests</h1>
+
+{% for booking in bookings %}
+
+<div class="card">
+
+<h2>{{ booking.full_name }}</h2>
+
+<p><strong>Email:</strong> {{ booking.email }}</p>
+
+<p><strong>Phone:</strong> {{ booking.phone }}</p>
+
+<p><strong>Date:</strong> {{ booking.lesson_date }}</p>
+
+<p><strong>Time:</strong> {{ booking.lesson_time }}</p>
+
+<p><strong>Status:</strong> {{ booking.status }}</p>
+
+<p><strong>Message:</strong></p>
+
+<p>{{ booking.message }}</p>
+
+<a href="/accept-booking/{{ booking.id }}">
+<button>Accept</button>
+</a>
+
+<a href="/decline-booking/{{ booking.id }}">
+<button>Decline</button>
+</a>
+
+<a href="/create-meeting/{{ booking.id }}">
+<button>Create Meeting</button>
+</a>
+
+</div>
+
+<br>
+
+{% endfor %}
+
+</div>
+
+</body>
+
+</html>

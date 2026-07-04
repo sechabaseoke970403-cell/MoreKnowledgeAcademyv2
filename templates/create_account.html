@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Create Tutor Account</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+<nav>
+
+    <div class="logo">MoreKnowledgeAcademy</div>
+
+</nav>
+
+<div class="application">
+
+    <h1>Create Tutor Account</h1>
+
+    <p>Welcome {{ tutor.full_name }}</p>
+
+    <form method="POST">
+
+        <label>Email</label>
+
+        <input
+            type="email"
+            value="{{ tutor.email }}"
+            readonly>
+
+        <label>Create Password</label>
+
+        <input
+            type="password"
+            name="password"
+            required>
+
+        <label>Confirm Password</label>
+
+        <input
+            type="password"
+            name="confirm_password"
+            required>
+
+        <button type="submit">
+
+            Create Account
+
+        </button>
+
+    </form>
+
+</div>
+
+</body>
+
+</html>

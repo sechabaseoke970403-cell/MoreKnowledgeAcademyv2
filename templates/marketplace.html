@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>Find a Tutor</title>
+
+<link rel="stylesheet"
+href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+<div class="application">
+
+<h1>Find Your Tutor</h1>
+
+<form method="GET">
+
+<input
+type="text"
+name="subject"
+placeholder="Subject">
+
+<input
+type="text"
+name="province"
+placeholder="Province">
+
+<select name="mode">
+
+<option value="">Teaching Mode</option>
+
+<option>Online</option>
+
+<option>Physical</option>
+
+</select>
+
+<button>
+
+Search
+
+</button>
+
+</form>
+
+<hr>
+
+<nav>
+
+<div class="logo">
+
+MoreKnowledgeAcademy
+
+</div>
+
+<div class="menu">
+
+<a href="/">Home</a>
+
+<a href="/tutor-login">Tutor Login</a>
+
+</div>
+
+</nav>
+
+<div class="application">
+
+<h1>Find a Tutor</h1>
+
+<div class="marketGrid">
+
+{% for tutor in tutors %}
+
+<div class="card">
+
+<img
+src="{{ url_for('uploaded_file',folder='photos',filename=tutor.profile_photo) }}"
+class="tutorPhoto">
+
+<h2>{{ tutor.full_name }}</h2>
+
+<p><b>{{ tutor.subject }}</b></p>
+
+<p>{{ tutor.province }}</p>
+
+<p>{{ tutor.city }}</p>
+
+<p>{{ tutor.teaching_mode }}</p>
+
+<p>{{ tutor.bio }}</p>
+
+<p>
+
+⭐ {{ tutor.rating }}
+
+</p>
+
+<p>
+
+<b>R{{ tutor.hourly_rate }}/hour</b>
+
+</p>
+
+<a href="/tutor/{{ tutor.id }}">
+<button>
+
+View Profile
+
+</button>
+
+</a>
+
+</div>
+
+<hr>
+
+{% endfor %}
+
+</div>
+
+</div>
+
+
+{% if tutors|length == 0 %}
+
+<h2>
+
+No tutors found.
+
+</h2>
+
+{% endif %}
+
+</body>
+
+</html>

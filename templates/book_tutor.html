@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Book Lesson</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+<div class="application">
+
+    <h1>Book {{ tutor.full_name }}</h1>
+
+    <h3>{{ tutor.subject }}</h3>
+
+    {% if error %}
+
+    <div style="background:#ffdddd;color:red;padding:15px;margin-bottom:20px;border-radius:8px;">
+
+        {{ error }}
+
+    </div>
+
+    {% endif %}
+
+    <h3>Tutor Availability</h3>
+
+    <table border="1" cellpadding="8">
+
+        <tr>
+
+            <th>Day</th>
+            <th>From</th>
+            <th>To</th>
+
+        </tr>
+
+        {% for slot in availability %}
+
+        <tr>
+
+            <td>{{ slot.day }}</td>
+            <td>{{ slot.start_time }}</td>
+            <td>{{ slot.end_time }}</td>
+
+        </tr>
+
+        {% endfor %}
+
+    </table>
+
+    <br>
+
+    <form method="POST">
+
+        <label>Lesson Date</label>
+
+        <input
+        type="date"
+        name="lesson_date"
+        required>
+
+        <label>Lesson Time</label>
+
+        <input
+        type="time"
+        name="lesson_time"
+        required>
+
+        <label>Message</label>
+
+        <textarea
+        name="message"
+        rows="5"></textarea>
+
+        <br><br>
+
+        <button type="submit">
+
+            Continue to Payment
+
+        </button>
+
+    </form>
+
+</div>
+
+</body>
+
+</html>

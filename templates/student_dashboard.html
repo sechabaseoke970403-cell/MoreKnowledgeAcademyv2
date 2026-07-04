@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Student Dashboard</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+<nav>
+
+    <div class="logo">
+        MoreKnowledgeAcademy
+    </div>
+
+    <div class="menu">
+
+        <a href="/student-dashboard">Home</a>
+        <a href="/marketplace">Find Tutor</a>
+        <a href="/my-bookings">My Bookings</a>
+        <a href="/student-profile">My Profile</a>
+        <a href="/student-logout">Logout</a>
+
+    </div>
+
+</nav>
+
+<div class="application">
+
+    <h1>Welcome {{ student.full_name }}</h1>
+
+    <div class="dashboardGrid">
+
+        <div class="card">
+
+            <h2>Find a Tutor</h2>
+
+            <p>Browse verified tutors and book lessons.</p>
+
+            <a href="/marketplace">
+                <button>Find Tutor</button>
+            </a>
+
+        </div>
+
+        <div class="card">
+
+            <h2>My Bookings</h2>
+
+            <p>View upcoming and previous lessons.</p>
+
+            <a href="/my-bookings">
+                <button>View Bookings</button>
+            </a>
+
+        </div>
+
+        <div class="card">
+
+            <h2>My Profile</h2>
+
+            <p>Manage your account.</p>
+
+            <a href="/student-profile">
+                <button>Edit Profile</button>
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+</button>
+
+</a>
+
+<a href="/marketplace">
+    <button>Find Tutor</button>
+</a>
+
+<a href="/my-lessons">
+
+<button>
+
+My Lessons
+
+</body>
+
+</html>

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Tutor Application</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+<nav>
+
+    <div class="logo">
+        MoreKnowledgeAcademy Admin
+    </div>
+
+    <div class="menu">
+        <a href="/dashboard">Dashboard</a>
+        <a href="/admin/logout">Logout</a>
+    </div>
+
+</nav>
+
+<div class="application">
+
+    <div class="profileGrid">
+
+        <div class="leftPanel">
+
+            <a href="{{ url_for('uploaded_file', folder='photos', filename=tutor.photo) }}"
+               target="_blank">
+
+                <img src="{{ url_for('uploaded_file', folder='photos', filename=tutor.photo) }}"
+                     class="tutorPhoto"
+                     alt="Tutor Photo">
+
+            </a>
+
+            <h2>{{ tutor.full_name }}</h2>
+
+            <p class="subjectTag">
+                {{ tutor.subject }}
+            </p>
+
+            <p>
+                <strong>Teaching Method:</strong>
+                {{ tutor.teaching_mode }}
+            </p>
+
+        </div>
+
+        <div class="rightPanel">
+
+            <h3>Personal Information</h3>
+
+            <p><strong>Email:</strong> {{ tutor.email }}</p>
+            <p><strong>Phone:</strong> {{ tutor.phone }}</p>
+            <p><strong>Province:</strong> {{ tutor.province }}</p>
+            <p><strong>City:</strong> {{ tutor.city }}</p>
+            <p><strong>Qualification:</strong> {{ tutor.qualification }}</p>
+            <p><strong>Experience:</strong> {{ tutor.experience }} Years</p>
+
+            <p>
+                <strong>About</strong><br>
+                {{ tutor.about }}
+            </p>
+
+        </div>
+
+    </div>
+
+    <hr>
+
+    <h2>Documents</h2>
+
+    <a href="{{ url_for('uploaded_file', folder='cvs', filename=tutor.cv) }}"
+       target="_blank">
+        <button>View CV</button>
+    </a>
+
+    <a href="{{ url_for('uploaded_file', folder='qualifications', filename=tutor.qualification_file) }}"
+       target="_blank">
+        <button>Qualification</button>
+    </a>
+
+    <a href="{{ url_for('uploaded_file', folder='ids', filename=tutor.id_document) }}"
+       target="_blank">
+        <button>ID Document</button>
+    </a>
+
+    <hr>
+
+    <h2>Recruitment</h2>
+
+    <a href="/approve/{{ tutor.id }}">
+        <button>Approve</button>
+    </a>
+
+    <a href="/reject/{{ tutor.id }}">
+        <button>Reject</button>
+    </a>
+
+    <a href="/schedule/{{ tutor.id }}">
+        <button>Schedule Interview</button>
+    </a>
+
+    <a href="/request-demo/{{ tutor.id }}">
+        <button>Request Demo Lesson</button>
+    </a>
+
+    <a href="/review-demo/{{ tutor.id }}">
+        <button>Review Demo</button>
+    </a>
+
+    {% if tutor.application_stage == "Demo Approved" %}
+
+        <a href="/activate-tutor/{{ tutor.id }}">
+            <button>Activate Tutor</button>
+        </a>
+
+    {% endif %}
+
+</div>
+
+</body>
+</html>

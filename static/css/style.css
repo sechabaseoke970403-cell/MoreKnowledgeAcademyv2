@@ -1,0 +1,478 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+
+    font-family:'Segoe UI',sans-serif;
+    background:#f5f7fb;
+
+}
+
+/* NAVBAR */
+
+nav{
+
+    height:80px;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:0 70px;
+
+    background:#0f172a;
+
+}
+
+.logo{
+
+    color:white;
+
+    font-size:28px;
+
+    font-weight:bold;
+
+}
+
+.menu a{
+
+    color:white;
+
+    text-decoration:none;
+
+    margin-left:30px;
+
+    transition:.3s;
+
+}
+
+.menu a:hover{
+
+    color:#38bdf8;
+
+}
+
+/* HERO */
+
+.hero{
+
+    height:90vh;
+
+    display:flex;
+
+    align-items:center;
+
+    padding-left:90px;
+
+    color:white;
+
+    background:
+    linear-gradient(rgba(15,23,42,.65),rgba(15,23,42,.65)),
+    url("https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1600&q=80");
+
+    background-size:cover;
+
+    background-position:center;
+
+}
+
+.hero-text{
+
+    width:600px;
+
+}
+
+.hero h1{
+
+    font-size:55px;
+
+    margin-bottom:20px;
+
+}
+
+.hero p{
+
+    font-size:20px;
+
+    line-height:1.7;
+
+    margin-bottom:35px;
+
+}
+
+button{
+
+    padding:15px 35px;
+
+    border:none;
+
+    border-radius:8px;
+
+    background:#38bdf8;
+
+    color:white;
+
+    font-size:16px;
+
+    cursor:pointer;
+
+    margin-right:15px;
+
+}
+
+.outline{
+
+    background:transparent;
+
+    border:2px solid white;
+
+}
+
+.application{
+
+max-width:800px;
+
+margin:60px auto;
+
+background:white;
+
+padding:40px;
+
+border-radius:12px;
+
+box-shadow:0 5px 20px rgba(0,0,0,.08);
+
+}
+
+.application h1{
+
+margin-bottom:10px;
+
+}
+
+.application p{
+
+margin-bottom:30px;
+
+color:#555;
+
+}
+
+.application input,
+.application select,
+.application textarea{
+
+width:100%;
+
+padding:14px;
+
+margin-top:15px;
+
+border:1px solid #ddd;
+
+border-radius:8px;
+
+font-size:15px;
+
+}
+
+.application textarea{
+
+height:140px;
+
+resize:none;
+
+}
+
+.application button{
+
+margin-top:25px;
+
+width:100%;
+
+}
+
+table{
+
+width:100%;
+
+border-collapse:collapse;
+
+margin-top:20px;
+
+}
+
+th{
+
+background:#0F172A;
+
+color:white;
+
+padding:14px;
+
+}
+
+td{
+
+padding:14px;
+
+border-bottom:1px solid #ddd;
+
+text-align:center;
+
+}
+
+tr:hover{
+
+background:#f5f5f5;
+
+}
+
+h3{
+    margin-top:30px;
+    color:#0F172A;
+}
+
+label{
+    display:block;
+    margin-top:18px;
+    font-weight:600;
+}
+
+input[type=file]{
+    padding:10px;
+    background:#f8fafc;
+}
+
+.stats{
+
+display:grid;
+
+grid-template-columns:repeat(4,1fr);
+
+gap:20px;
+
+margin-bottom:30px;
+
+}
+
+.card{
+
+background:white;
+
+padding:25px;
+
+border-radius:12px;
+
+text-align:center;
+
+box-shadow:0 5px 15px rgba(0,0,0,.08);
+
+}
+
+.card h2{
+
+font-size:36px;
+
+color:#0F172A;
+
+}
+
+.card p{
+
+margin-top:10px;
+
+color:#555;
+
+}
+
+.application p{
+
+margin:18px 0;
+
+font-size:17px;
+
+}
+
+.application strong{
+
+color:#0F172A;
+
+}
+
+.application h2{
+
+margin-top:35px;
+
+}
+
+/* ===================== TUTOR PHOTO ===================== */
+
+.tutorPhoto{
+
+    width:180px;
+
+    height:180px;
+
+    object-fit:cover;
+
+    border-radius:50%;
+
+    display:block;
+
+    margin:20px auto;
+
+    border:5px solid #38bdf8;
+
+    box-shadow:0 8px 20px rgba(0,0,0,.15);
+
+    background:#f5f5f5;
+
+}
+
+.profileGrid{
+
+display:grid;
+
+grid-template-columns:280px 1fr;
+
+gap:40px;
+
+align-items:flex-start;
+
+}
+
+.leftPanel{
+
+text-align:center;
+
+}
+
+.rightPanel{
+
+padding-top:10px;
+
+}
+
+.subjectTag{
+
+background:#38bdf8;
+
+color:white;
+
+display:inline-block;
+
+padding:8px 18px;
+
+border-radius:30px;
+
+font-weight:bold;
+
+margin-top:10px;
+
+}
+
+.rightPanel p{
+
+margin:15px 0;
+
+line-height:1.6;
+
+}
+
+@media(max-width:900px){
+
+.profileGrid{
+
+grid-template-columns:1fr;
+
+}
+
+}
+
+.pending{
+
+background:#fef3c7;
+
+color:#92400e;
+
+padding:6px 14px;
+
+border-radius:20px;
+
+font-weight:bold;
+
+}
+
+.approved{
+
+background:#dcfce7;
+
+color:#166534;
+
+padding:6px 14px;
+
+border-radius:20px;
+
+font-weight:bold;
+
+}
+
+.rejected{
+
+background:#fee2e2;
+
+color:#991b1b;
+
+padding:6px 14px;
+
+border-radius:20px;
+
+font-weight:bold;
+
+}
+
+.marketGrid{
+
+display:grid;
+
+grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+
+gap:25px;
+
+margin-top:30px;
+
+}
+
+.tutorCard{
+
+background:white;
+
+padding:20px;
+
+border-radius:12px;
+
+text-align:center;
+
+box-shadow:0 5px 15px rgba(0,0,0,.08);
+
+}
+
+.tutorCard img{
+
+width:120px;
+
+height:120px;
+
+border-radius:50%;
+
+object-fit:cover;
+
+margin-bottom:15px;
+
+}

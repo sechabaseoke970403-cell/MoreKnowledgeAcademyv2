@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>MoreKnowledgeAcademy</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+<nav>
+
+    <div class="logo">
+        MoreKnowledgeAcademy
+    </div>
+
+    <<div class="menu">
+
+<a href="/">Home</a>
+<a href="/marketplace">Find Tutors</a>
+<a href="/apply">Become a Tutor</a>
+<a href="/student-signup">Student Register</a>
+<a href="/student-login">Student Login</a>
+<a href="/tutor-login">Tutor Login</a>
+<a href="/admin">Admin</a>
+</div>
+</nav>
+
+<section class="hero">
+
+    <div class="hero-text">
+
+        <h1>Learn From South Africa's Best Online Tutors</h1>
+
+        <p>
+            Professional one-on-one online tutoring for Primary School,
+            High School and University students.
+        </p>
+
+        <a href="/marketplace">
+    <button>Find a Tutor</button>
+</a>
+
+        <button class="outline">Become a Tutor</button>
+
+    </div>
+
+</section>
+
+<div class="homeButtons">
+
+    <a href="/marketplace">
+        <button>Find a Tutor</button>
+    </a>
+
+    <a href="/student-signup">
+        <button>Student Register</button>
+    </a>
+
+    <a href="/student-login">
+        <button>Student Login</button>
+    </a>
+
+    <a href="/apply">
+        <button>Become a Tutor</button>
+    </a>
+
+</div>
+
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+
+</body>
+
+</html>
