@@ -22,13 +22,17 @@ app = Flask(__name__)
 app.config["MAIL_SERVER"] = "smtp.gmail.com"
 app.config["MAIL_PORT"] = 587
 app.config["MAIL_USE_TLS"] = True
-app.config["MAIL_USERNAME"] = "moreknowledgeacademy@gmail.com"
-app.config["MAIL_PASSWORD"] = "fafgjbdvbaudabkm"
-app.config["MAIL_DEFAULT_SENDER"] = "moreknowledgeacademy"
+import os
 
-mail.init_app(app)
+app.config["MAIL_SERVER"] = "smtp.gmail.com"
+app.config["MAIL_PORT"] = 587
+app.config["MAIL_USE_TLS"] = True
 
-app.secret_key = "CHANGE_ME"
+app.config["MAIL_USERNAME"] = os.environ.get("MAIL_USERNAME")
+app.config["MAIL_PASSWORD"] = os.environ.get("MAIL_PASSWORD")
+app.config["MAIL_DEFAULT_SENDER"] = os.environ.get("MAIL_DEFAULT_SENDER")
+
+app.secret_key = os.environ.get("SECRET_KEY")
 
 UPLOAD_FOLDER = "uploads"
 
