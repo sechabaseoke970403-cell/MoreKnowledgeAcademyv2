@@ -9,8 +9,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask import session
 import os
 from flask_mail import Mail
-from services.email_service import mail, send_interview_email
-from email_service import (
+from services.email_service import (
     mail,
     send_interview_email,
     send_activation_email,
@@ -19,10 +18,17 @@ from email_service import (
 )
 app = Flask(__name__)
 
-app.config["MAIL_SERVER"] = "smtp.gmail.com"
-app.config["MAIL_PORT"] = 587
-app.config["MAIL_USE_TLS"] = True
 import os
+
+# ===========================
+# SECRET KEY
+# ===========================
+
+app.secret_key = os.environ.get("SECRET_KEY")
+
+# ===========================
+# EMAIL SETTINGS
+# ===========================
 
 app.config["MAIL_SERVER"] = "smtp.gmail.com"
 app.config["MAIL_PORT"] = 587
@@ -32,11 +38,29 @@ app.config["MAIL_USERNAME"] = os.environ.get("MAIL_USERNAME")
 app.config["MAIL_PASSWORD"] = os.environ.get("MAIL_PASSWORD")
 app.config["MAIL_DEFAULT_SENDER"] = os.environ.get("MAIL_DEFAULT_SENDER")
 
-app.secret_key = os.environ.get("SECRET_KEY")
+mail.init_app(app)
+
+# ===========================
+# PAYFAST SETTINGS
+# ===========================
+
+PAYFAST_MERCHANT_ID = os.environ.get("PAYFAST_MERCHANT_ID")
+PAYFAST_MERCHANT_KEY = os.environ.get("PAYFAST_MERCHANT_KEY")
+PAYFAST_PASSPHRASE = os.environ.get("PAYFAST_PASSPHRASE")
+PAYFAST_URL = os.environ.get("PAYFAST_URL")
+
+# ===========================
+# FILE UPLOADS
+# ===========================
 
 UPLOAD_FOLDER = "uploads"
 
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
+
+os.makedirs("uploads/photos", exist_ok=True)
+os.makedirs("uploads/cvs", exist_ok=True)
+os.makedirs("uploads/qualifications", exist_ok=True)
+os.makedirs("uploads/ids", exist_ok=True)
 
 os.makedirs("uploads/photos", exist_ok=True)
 os.makedirs("uploads/cvs", exist_ok=True)
@@ -1463,18 +1487,15 @@ def pay_booking(booking_id):
     booking = conn.execute("""
 
     SELECT
-
         bookings.*,
-
         tutors.full_name,
-
         tutors.hourly_rate
 
     FROM bookings
 
     JOIN tutors
 
-    ON bookings.tutor_id=tutors.id
+    ON tutors.id=bookings.tutor_id
 
     WHERE bookings.id=?
 
@@ -1483,10 +1504,18 @@ def pay_booking(booking_id):
     conn.close()
 
     return render_template(
+
         "payfast.html",
-        booking=booking
+
+        booking=booking,
+
+        merchant_id=PAYFAST_MERCHANT_ID,
+
+        merchant_key=PAYFAST_MERCHANT_KEY,
+
+        payfast_url=PAYFAST_URL
+
     )
-    
 @app.route("/payment-success")
 def payment_success():
 

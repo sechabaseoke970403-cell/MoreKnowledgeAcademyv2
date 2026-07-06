@@ -5,63 +5,83 @@
 
 <title>Pay Lesson</title>
 
+<link rel="stylesheet"
+href="{{ url_for('static', filename='css/style.css') }}">
+
 </head>
 
 <body>
 
-<h2>Pay for Lesson</h2>
+<div class="application">
 
-<p>Tutor: {{ booking.full_name }}</p>
+<h2>Complete Payment</h2>
 
-<p>Amount: R{{ booking.hourly_rate }}</p>
+<p>
 
-<form action="https://www.payfast.co.za/eng/process" method="post">
+Tutor:
+<b>{{ booking.full_name }}</b>
 
-    <input
-    type="hidden"
-    name="merchant_id"
-    value="12957097">
+</p>
 
-    <input
-    type="hidden"
-    name="merchant_key"
-    value="pgcxs3ok7kf5o">
+<p>
 
-   <input
+Amount:
+<b>R{{ booking.hourly_rate }}</b>
+
+</p>
+
+<form action="{{ payfast_url }}" method="POST">
+
+<input
+type="hidden"
+name="merchant_id"
+value="{{ merchant_id }}">
+
+<input
+type="hidden"
+name="merchant_key"
+value="{{ merchant_key }}">
+
+<input
 type="hidden"
 name="amount"
 value="{{ booking.hourly_rate }}">
 
-    <input
-    type="hidden"
-    name="item_name"
-    value="Lesson Booking">
+<input
+type="hidden"
+name="item_name"
+value="Lesson Booking">
 
-    <input
-    type="hidden"
-    name="custom_int1"
-    value="{{ booking.id }}">
+<input
+type="hidden"
+name="custom_int1"
+value="{{ booking.id }}">
 
-    <input
-    type="hidden"
-    name="return_url"
-    value="http://127.0.0.1:5000/payment-success/{{ booking.id }}">
+<input
+type="hidden"
+name="return_url"
+value="https://YOUR_RENDER_URL/payment-success/{{ booking.id }}">
 
-    <input
-    type="hidden"
-    name="cancel_url"
-    value="http://127.0.0.1:5000/payment-cancel">
+<input
+type="hidden"
+name="cancel_url"
+value="https://YOUR_RENDER_URL/payment-cancel">
 
-    <input
-    type="hidden"
-    name="notify_url"
-    value="http://127.0.0.1:5000/payfast-itn">
+<input
+type="hidden"
+name="notify_url"
+value="https://YOUR_RENDER_URL/payfast-itn">
 
-    <button type="submit">
-        Pay Now
-    </button>
+<button type="submit">
+
+Pay Now
+
+</button>
 
 </form>
+
+</div>
+
 </body>
 
 </html>
