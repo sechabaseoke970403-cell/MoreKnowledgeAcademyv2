@@ -62,10 +62,6 @@ os.makedirs("uploads/cvs", exist_ok=True)
 os.makedirs("uploads/qualifications", exist_ok=True)
 os.makedirs("uploads/ids", exist_ok=True)
 
-os.makedirs("uploads/photos", exist_ok=True)
-os.makedirs("uploads/cvs", exist_ok=True)
-os.makedirs("uploads/qualifications", exist_ok=True)
-os.makedirs("uploads/ids", exist_ok=True)
 
 def generate_activation_code():
 

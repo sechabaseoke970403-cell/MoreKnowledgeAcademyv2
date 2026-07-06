@@ -2,21 +2,25 @@ from flask_mail import Mail, Message
 
 mail = Mail()
 
-def send_interview_email(app, tutor_email, tutor_name, subject,
-                         interview_date, interview_time, zoom_link):
+
+def send_interview_email(
+    app,
+    tutor_email,
+    tutor_name,
+    subject,
+    interview_date,
+    interview_time,
+    zoom_link
+):
 
     with app.app_context():
 
         msg = Message(
-
             subject="MoreKnowledgeAcademy Interview Invitation",
-
             recipients=[tutor_email]
-
         )
 
         msg.body = f"""
-
 Dear {tutor_name},
 
 Congratulations.
@@ -32,16 +36,133 @@ Time: {interview_time}
 Zoom Link:
 {zoom_link}
 
-After the interview please prepare a 30-minute demo lesson teaching your selected subject:
+After the interview please prepare a 30-minute demo lesson teaching:
 
 {subject}
 
-The recording should demonstrate your teaching style as if you were teaching a real student.
-
-Kind regards,
+Regards,
 
 MoreKnowledgeAcademy Recruitment Team
+"""
 
+        mail.send(msg)
+
+
+def send_activation_email(
+    app,
+    tutor_email,
+    tutor_name,
+    activation_link,
+    activation_code
+):
+
+    with app.app_context():
+
+        msg = Message(
+            subject="Activate Your MoreKnowledgeAcademy Tutor Account",
+            recipients=[tutor_email]
+        )
+
+        msg.body = f"""
+Dear {tutor_name},
+
+Congratulations!
+
+Your application has been approved.
+
+Please activate your tutor account.
+
+Activation Link
+
+{activation_link}
+
+Activation Code
+
+{activation_code}
+
+Use the activation code when creating your account.
+
+Regards,
+
+MoreKnowledgeAcademy Recruitment Team
+"""
+
+        mail.send(msg)
+
+
+def send_booking_email(
+    app,
+    student_email,
+    student_name,
+    tutor_name,
+    lesson_date,
+    lesson_time
+):
+
+    with app.app_context():
+
+        msg = Message(
+            subject="Lesson Booking Confirmation",
+            recipients=[student_email]
+        )
+
+        msg.body = f"""
+Hello {student_name},
+
+Your booking has been received successfully.
+
+Tutor:
+{tutor_name}
+
+Lesson Date:
+{lesson_date}
+
+Lesson Time:
+{lesson_time}
+
+Please complete your payment to confirm your lesson.
+
+Thank you.
+
+MoreKnowledgeAcademy
+"""
+
+        mail.send(msg)
+
+
+def send_new_booking_to_tutor(
+    app,
+    tutor_email,
+    tutor_name,
+    student_name,
+    lesson_date,
+    lesson_time
+):
+
+    with app.app_context():
+
+        msg = Message(
+            subject="New Paid Lesson Booking",
+            recipients=[tutor_email]
+        )
+
+        msg.body = f"""
+Hello {tutor_name},
+
+A student has successfully paid for a lesson.
+
+Student:
+{student_name}
+
+Lesson Date:
+{lesson_date}
+
+Lesson Time:
+{lesson_time}
+
+Please log in to your tutor dashboard for full details.
+
+MoreKnowledgeAcademy
 """
 
         mail.send(msg)
