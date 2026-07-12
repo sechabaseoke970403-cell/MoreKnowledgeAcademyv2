@@ -55,38 +55,42 @@
     </table>
 
     <br>
+<form method="POST">
 
-    <form method="POST">
+    <label>Select Available Slot</label>
 
-        <label>Lesson Date</label>
+    <select name="slot" required>
 
-        <input
-        type="date"
-        name="lesson_date"
-        required>
+        <option value="">Select Slot</option>
 
-        <label>Lesson Time</label>
+        {% for slot in availability %}
 
-        <input
-        type="time"
-        name="lesson_time"
-        required>
+        <option value="{{ slot.day }}|{{ slot.start_time }}">
 
-        <label>Message</label>
+            {{ slot.day }} -
+            {{ slot.start_time }} to
+            {{ slot.end_time }}
 
-        <textarea
+        </option>
+
+        {% endfor %}
+
+    </select>
+
+    <label>Message</label>
+
+    <textarea
         name="message"
-        rows="5"></textarea>
+        rows="5"
+        placeholder="Optional message to the tutor"></textarea>
 
-        <br><br>
+    <button type="submit">
 
-        <button type="submit">
+        Continue to Payment
 
-            Continue to Payment
+    </button>
 
-        </button>
-
-    </form>
+</form>
 
 </div>
 

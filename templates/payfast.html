@@ -3,10 +3,10 @@
 
 <head>
 
-<title>Pay Lesson</title>
+    <title>Complete Payment</title>
 
-<link rel="stylesheet"
-href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
 
 </head>
 
@@ -14,71 +14,55 @@ href="{{ url_for('static', filename='css/style.css') }}">
 
 <div class="application">
 
-<h2>Complete Payment</h2>
+    <h2>Complete Payment</h2>
 
-<p>
+    <p><b>Tutor:</b> {{ booking.full_name }}</p>
 
-Tutor:
-<b>{{ booking.full_name }}</b>
+    <p><b>Amount:</b> R{{ booking.hourly_rate }}</p>
 
-</p>
+    <form
+        action="{{ PAYFAST_URL }}"
+        method="post">
 
-<p>
+        <input type="hidden"
+               name="merchant_id"
+               value="{{ PAYFAST_MERCHANT_ID }}">
 
-Amount:
-<b>R{{ booking.hourly_rate }}</b>
+        <input type="hidden"
+               name="merchant_key"
+               value="{{ PAYFAST_MERCHANT_KEY }}">
 
-</p>
+        <input type="hidden"
+               name="amount"
+               value="{{ booking.hourly_rate }}">
 
-<form action="{{ payfast_url }}" method="POST">
+        <input type="hidden"
+               name="item_name"
+               value="Lesson Booking">
 
-<input
-type="hidden"
-name="merchant_id"
-value="{{ merchant_id }}">
+        <input type="hidden"
+               name="custom_int1"
+               value="{{ booking.id }}">
 
-<input
-type="hidden"
-name="merchant_key"
-value="{{ merchant_key }}">
+        <input type="hidden"
+               name="return_url"
+               value="https://moreknowledgeacademyv2.onrender.com/payment-success?booking={{ booking.id }}">
 
-<input
-type="hidden"
-name="amount"
-value="{{ booking.hourly_rate }}">
+        <input type="hidden"
+               name="cancel_url"
+               value="https://moreknowledgeacademyv2.onrender.com/payment-cancel">
 
-<input
-type="hidden"
-name="item_name"
-value="Lesson Booking">
+        <input type="hidden"
+               name="notify_url"
+               value="https://moreknowledgeacademyv2.onrender.com/payfast-itn">
 
-<input
-type="hidden"
-name="custom_int1"
-value="{{ booking.id }}">
+        <button type="submit">
 
-<input
-type="hidden"
-name="return_url"
-value="https://YOUR_RENDER_URL/payment-success/{{ booking.id }}">
+            Pay Securely with PayFast
 
-<input
-type="hidden"
-name="cancel_url"
-value="https://YOUR_RENDER_URL/payment-cancel">
+        </button>
 
-<input
-type="hidden"
-name="notify_url"
-value="https://YOUR_RENDER_URL/payfast-itn">
-
-<button type="submit">
-
-Pay Now
-
-</button>
-
-</form>
+    </form>
 
 </div>
 

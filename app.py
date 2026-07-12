@@ -1,3 +1,5 @@
+import hashlib
+import urllib.parse
 import secrets
 import string
 from datetime import datetime
@@ -24,8 +26,12 @@ import os
 # SECRET KEY
 # ===========================
 
-app.secret_key = os.environ.get("SECRET_KEY")
+SECRET_KEY = os.environ.get(
+    "SECRET_KEY",
+    "MoreKnowledgeAcademy2026!Secure#Key987"
+)
 
+app.secret_key = SECRET_KEY
 # ===========================
 # EMAIL SETTINGS
 # ===========================
@@ -1261,6 +1267,232 @@ def book_tutor(tutor_id):
 
     availability = conn.execute("""
 
+        SELECT *
+
+        FROM tutor_availability
+
+        WHERE tutor_id=?
+
+        ORDER BY day,start_time
+
+    """,(tutor_id,)).fetchall()
+
+    if request.method == "POST":
+
+        slot = request.form["slot"]
+
+        lesson_day, lesson_time = slot.split("|")
+
+        message = request.form["message"]
+
+        cursor = conn.cursor()
+
+        cursor.execute("""
+
+            INSERT INTO bookings(
+
+                student_id,
+                tutor_id,
+                lesson_date,
+                lesson_time,
+                subject,
+                message,
+                amount,
+                status,
+                payment_status
+
+            )
+
+            VALUES(?,?,?,?,?,?,?,?,?)
+
+        """,(
+
+            student["id"],
+            tutor_id,
+            lesson_day,
+            lesson_time,
+            tutor["subject"],
+            message,
+            tutor["hourly_rate"],
+            "Pending",
+            "Pending"
+
+        ))
+
+        conn.commit()
+
+        booking_id = cursor.lastrowid
+
+        conn.close()
+
+        return redirect(url_for(
+            "pay_booking",
+            booking_id=booking_id
+        ))
+
+    conn.close()
+
+    return render_template(
+
+        "book_tutor.html",
+
+        tutor=tutor,
+
+        availability=availability
+
+    )
+
+    if "student" not in session:
+        return redirect("/student-login")
+
+    conn = get_connection()
+
+    tutor = conn.execute(
+        "SELECT * FROM tutors WHERE id=?",
+        (tutor_id,)
+    ).fetchone()
+
+    student = conn.execute(
+        "SELECT * FROM students WHERE id=?",
+        (session["student"],)
+    ).fetchone()
+
+    availability = conn.execute("""
+
+    SELECT *
+
+    FROM tutor_availability
+
+    WHERE tutor_id=?
+
+    ORDER BY day,start_time
+
+    """,(tutor_id,)).fetchall()
+
+    if request.method == "POST":
+
+        slot = request.form["slot"]
+
+        message = request.form["message"]
+
+        lesson_day, lesson_time = slot.split("|")
+
+        existing = conn.execute("""
+
+        SELECT id
+
+        FROM bookings
+
+        WHERE tutor_id=?
+        AND lesson_date=?
+        AND lesson_time=?
+        AND status!='Cancelled'
+
+        """,(
+
+            tutor_id,
+            lesson_day,
+            lesson_time
+
+        )).fetchone()
+
+        if existing:
+
+            conn.close()
+
+            return render_template(
+
+                "book_tutor.html",
+
+                tutor=tutor,
+
+                availability=availability,
+
+                error="This slot has already been booked."
+
+            )
+
+        conn.execute("""
+
+        INSERT INTO bookings(
+
+            student_id,
+            tutor_id,
+            lesson_date,
+            lesson_time,
+            subject,
+            message,
+            amount
+
+        )
+
+        VALUES(?,?,?,?,?,?,?)
+
+        """,(
+
+            student["id"],
+            tutor_id,
+            lesson_day,
+            lesson_time,
+            tutor["subject"],
+            message,
+            tutor["hourly_rate"]
+
+        ))
+
+        conn.commit()
+
+        booking_id = conn.execute(
+
+            "SELECT last_insert_rowid()"
+
+        ).fetchone()[0]
+
+        print("BOOKING CREATED:", booking_id)
+
+        conn.close()
+
+        return redirect(
+
+            url_for(
+
+                "pay_booking",
+
+                booking_id=booking_id
+
+            )
+
+        )
+
+    conn.close()
+
+    return render_template(
+
+        "book_tutor.html",
+
+        tutor=tutor,
+
+        availability=availability
+
+    )
+
+    if "student" not in session:
+        return redirect("/student-login")
+
+    conn = get_connection()
+
+    tutor = conn.execute(
+        "SELECT * FROM tutors WHERE id=?",
+        (tutor_id,)
+    ).fetchone()
+
+    student = conn.execute(
+        "SELECT * FROM students WHERE id=?",
+        (session["student"],)
+    ).fetchone()
+
+    availability = conn.execute("""
+
     SELECT *
 
     FROM tutor_availability
@@ -1273,45 +1505,11 @@ def book_tutor(tutor_id):
 
     if request.method == "POST":
 
-        lesson_date = request.form["lesson_date"]
-        lesson_time = request.form["lesson_time"]
+        slot = request.form["slot"]
+
+        lesson_date, lesson_time = slot.split("|")
+
         message = request.form["message"]
-
-        day = datetime.strptime(
-            lesson_date,
-            "%Y-%m-%d"
-        ).strftime("%A")
-
-        slot = conn.execute("""
-
-        SELECT *
-
-        FROM tutor_availability
-
-        WHERE tutor_id=?
-        AND day=?
-        AND start_time<=?
-        AND end_time>=?
-
-        """, (
-
-            tutor_id,
-            day,
-            lesson_time,
-            lesson_time
-
-        )).fetchone()
-
-        if not slot:
-
-            conn.close()
-
-            return render_template(
-                "book_tutor.html",
-                tutor=tutor,
-                availability=availability,
-                error="Tutor is not available at the selected date and time."
-            )
 
         existing = conn.execute("""
 
@@ -1337,13 +1535,18 @@ def book_tutor(tutor_id):
             conn.close()
 
             return render_template(
+
                 "book_tutor.html",
+
                 tutor=tutor,
+
                 availability=availability,
-                error="This time has already been booked."
+
+                error="This slot has already been booked."
+
             )
 
-        conn.execute("""
+        cursor = conn.execute("""
 
         INSERT INTO bookings(
 
@@ -1373,22 +1576,28 @@ def book_tutor(tutor_id):
 
         conn.commit()
 
-        booking_id = conn.execute(
-            "SELECT last_insert_rowid()"
-        ).fetchone()[0]
+        booking_id = cursor.lastrowid
+
+        print("BOOKING ID =", booking_id)
 
         conn.close()
 
-        return redirect(f"/pay/{booking_id}")
+        return redirect(url_for(
+            "pay_booking",
+            booking_id=booking_id
+        ))
 
     conn.close()
 
     return render_template(
+
         "book_tutor.html",
+
         tutor=tutor,
+
         availability=availability
-    )
-    
+
+    )   
 @app.route("/tutor-bookings")
 def tutor_bookings():
 
@@ -1482,22 +1691,33 @@ def pay_booking(booking_id):
 
     booking = conn.execute("""
 
-    SELECT
-        bookings.*,
-        tutors.full_name,
-        tutors.hourly_rate
+        SELECT
 
-    FROM bookings
+            bookings.*,
 
-    JOIN tutors
+            tutors.full_name,
 
-    ON tutors.id=bookings.tutor_id
+            tutors.hourly_rate
 
-    WHERE bookings.id=?
+        FROM bookings
+
+        JOIN tutors
+
+            ON tutors.id = bookings.tutor_id
+
+        WHERE bookings.id=?
 
     """,(booking_id,)).fetchone()
 
     conn.close()
+
+    if booking is None:
+        return "Booking not found",404
+
+    print("========== PAYMENT ==========")
+    print(dict(booking))
+    print("PAYFAST_URL =", PAYFAST_URL)
+    print("=============================")
 
     return render_template(
 
@@ -1505,15 +1725,205 @@ def pay_booking(booking_id):
 
         booking=booking,
 
-        merchant_id=PAYFAST_MERCHANT_ID,
+        PAYFAST_URL=PAYFAST_URL,
 
-        merchant_key=PAYFAST_MERCHANT_KEY,
+        PAYFAST_MERCHANT_ID=PAYFAST_MERCHANT_ID,
 
-        payfast_url=PAYFAST_URL
+        PAYFAST_MERCHANT_KEY=PAYFAST_MERCHANT_KEY
+
+    )
+
+    if "student" not in session:
+        return redirect("/student-login")
+
+    conn = get_connection()
+
+    booking = conn.execute("""
+
+        SELECT
+            bookings.*,
+            tutors.full_name,
+            tutors.hourly_rate
+
+        FROM bookings
+
+        JOIN tutors
+            ON tutors.id = bookings.tutor_id
+
+        WHERE bookings.id=?
+
+    """, (booking_id,)).fetchone()
+
+    conn.close()
+
+    if booking is None:
+        return "Booking not found", 404
+
+    print("BOOKING =", dict(booking))
+    print("PAYFAST_URL =", PAYFAST_URL)
+
+    return render_template(
+        "payfast.html",
+        booking=booking,
+        PAYFAST_URL=PAYFAST_URL,
+        PAYFAST_MERCHANT_ID=PAYFAST_MERCHANT_ID,
+        PAYFAST_MERCHANT_KEY=PAYFAST_MERCHANT_KEY
+    )
+
+    if "student" not in session:
+        return redirect("/student-login")
+
+    conn = get_connection()
+
+    booking = conn.execute("""
+
+        SELECT
+            bookings.*,
+            tutors.full_name,
+            tutors.hourly_rate
+
+        FROM bookings
+
+        JOIN tutors
+            ON tutors.id = bookings.tutor_id
+
+        WHERE bookings.id=?
+
+    """, (booking_id,)).fetchone()
+
+    conn.close()
+
+    if booking is None:
+        return "Booking not found", 404
+
+    print("BOOKING =", dict(booking))
+
+    return render_template(
+        "payfast.html",
+        booking=booking,
+        PAYFAST_URL=PAYFAST_URL,
+        PAYFAST_MERCHANT_ID=PAYFAST_MERCHANT_ID,
+        PAYFAST_MERCHANT_KEY=PAYFAST_MERCHANT_KEY
+    )
+
+    if "student" not in session:
+        return redirect("/student-login")
+
+    conn = get_connection()
+
+    booking = conn.execute("""
+
+    SELECT
+
+        bookings.*,
+
+        tutors.full_name,
+
+        tutors.hourly_rate
+
+    FROM bookings
+
+    JOIN tutors
+
+    ON tutors.id = bookings.tutor_id
+
+    WHERE bookings.id=?
+
+    """,(booking_id,)).fetchone()
+
+    conn.close()
+
+    print("BOOKING =", dict(booking))
+
+    return render_template(
+
+        "payfast.html",
+
+        booking=booking,
+
+        PAYFAST_URL=PAYFAST_URL,
+
+        PAYFAST_MERCHANT_ID=PAYFAST_MERCHANT_ID,
+
+        PAYFAST_MERCHANT_KEY=PAYFAST_MERCHANT_KEY
+
+    )
+
+    if "student" not in session:
+        return redirect("/student-login")
+
+    conn = get_connection()
+
+    booking = conn.execute("""
+
+    SELECT
+        bookings.*,
+        tutors.full_name,
+        tutors.hourly_rate
+
+    FROM bookings
+    JOIN tutors
+    ON tutors.id = bookings.tutor_id
+
+    WHERE bookings.id=?
+
+    """,(booking_id,)).fetchone()
+
+    conn.close()
+
+    if booking is None:
+        return "Booking not found"
+    print("PAYFAST_URL =", PAYFAST_URL)
+    return render_template(
+
+        "payfast.html",
+
+        booking=booking,
+
+        PAYFAST_URL=PAYFAST_URL,
+
+        PAYFAST_MERCHANT_ID=PAYFAST_MERCHANT_ID,
+
+        PAYFAST_MERCHANT_KEY=PAYFAST_MERCHANT_KEY
 
     )
 @app.route("/payment-success")
 def payment_success():
+
+    booking_id = request.args.get("booking")
+
+    if booking_id:
+
+        conn = get_connection()
+
+        conn.execute("""
+
+            UPDATE bookings
+
+            SET payment_status='Paid'
+
+            WHERE id=?
+
+        """, (booking_id,))
+
+        conn.commit()
+
+        conn.close()
+
+    return render_template(
+        "payment_success.html",
+        booking_id=booking_id
+    )
+
+    booking_id = request.args.get("booking")
+
+    return render_template(
+
+        "payment_success.html",
+
+        booking_id=booking_id
+
+    )
 
     booking_id = request.args.get("booking")
 
@@ -1675,19 +2085,31 @@ def tutor_earnings():
 
     conn = get_connection()
 
-    bookings = conn.execute("""
+    earnings = conn.execute("""
 
-    SELECT *
+    SELECT
 
-    FROM bookings
+        earnings.*,
 
-    WHERE
+        bookings.lesson_date,
 
-        tutor_id=?
+        bookings.lesson_time,
 
-        AND payment_status='Paid'
+        students.full_name
 
-    ORDER BY created_at DESC
+    FROM earnings
+
+    JOIN bookings
+
+        ON bookings.id = earnings.booking_id
+
+    JOIN students
+
+        ON students.id = bookings.student_id
+
+    WHERE earnings.tutor_id=?
+
+    ORDER BY earnings.created_at DESC
 
     """,(session["tutor"],)).fetchall()
 
@@ -1695,15 +2117,11 @@ def tutor_earnings():
 
     SELECT
 
-    COALESCE(SUM(lesson_price),0)
+    COALESCE(SUM(tutor_amount),0)
 
-    FROM bookings
+    FROM earnings
 
-    WHERE
-
-        tutor_id=?
-
-        AND payment_status='Paid'
+    WHERE tutor_id=?
 
     """,(session["tutor"],)).fetchone()[0]
 
@@ -1713,12 +2131,11 @@ def tutor_earnings():
 
         "tutor_earnings.html",
 
-        bookings=bookings,
+        earnings=earnings,
 
         total=total
 
     )
-
 @app.route("/admin-revenue")
 def admin_revenue():
 
@@ -1727,25 +2144,31 @@ def admin_revenue():
 
     conn = get_connection()
 
-    total = conn.execute("""
+    total_platform = conn.execute("""
 
     SELECT
 
-    COALESCE(SUM(lesson_price),0)
+    COALESCE(SUM(platform_fee),0)
 
-    FROM bookings
-
-    WHERE payment_status='Paid'
+    FROM earnings
 
     """).fetchone()[0]
 
-    bookings = conn.execute("""
+    total_paid = conn.execute("""
+
+    SELECT
+
+    COALESCE(SUM(amount),0)
+
+    FROM earnings
+
+    """).fetchone()[0]
+
+    earnings = conn.execute("""
 
     SELECT *
 
-    FROM bookings
-
-    WHERE payment_status='Paid'
+    FROM earnings
 
     ORDER BY created_at DESC
 
@@ -1757,12 +2180,13 @@ def admin_revenue():
 
         "admin_revenue.html",
 
-        total=total,
+        earnings=earnings,
 
-        bookings=bookings
+        total_platform=total_platform,
+
+        total_paid=total_paid
 
     )
-
 @app.route("/update-bookings")
 def update_bookings():
 
@@ -1782,6 +2206,219 @@ def update_bookings():
 
 @app.route("/payfast-itn", methods=["POST"])
 def payfast_itn():
+
+    data = request.form.to_dict()
+
+    received_signature = data.pop("signature", "")
+
+    pf_string = ""
+
+    for key in sorted(data.keys()):
+
+        if data[key] != "":
+
+            pf_string += f"{key}={urllib.parse.quote_plus(str(data[key]))}&"
+
+    pf_string = pf_string[:-1]
+
+    if PAYFAST_PASSPHRASE:
+
+        pf_string += "&passphrase=" + urllib.parse.quote_plus(PAYFAST_PASSPHRASE)
+
+    generated_signature = hashlib.md5(
+        pf_string.encode()
+    ).hexdigest()
+
+    if generated_signature != received_signature:
+
+        return "Invalid Signature", 400
+
+    booking_id = data.get("custom_int1")
+
+    payment_status = data.get("payment_status")
+
+    if payment_status != "COMPLETE":
+
+        return "Payment Not Complete"
+
+    conn = get_connection()
+
+    booking = conn.execute("""
+
+    SELECT
+
+        bookings.*,
+
+        students.full_name AS student_name,
+        students.email AS student_email,
+
+        tutors.full_name AS tutor_name,
+        tutors.email AS tutor_email
+
+    FROM bookings
+
+    JOIN students
+        ON students.id=bookings.student_id
+
+    JOIN tutors
+        ON tutors.id=bookings.tutor_id
+
+    WHERE bookings.id=?
+
+    """,(booking_id,)).fetchone()
+
+    if booking is None:
+
+        conn.close()
+
+        return "Booking Not Found",404
+
+    if booking["payment_status"] == "Paid":
+
+        conn.close()
+
+        return "Already Processed"
+
+    conn.execute("""
+
+    UPDATE bookings
+
+    SET
+
+        payment_status='Paid',
+
+        status='Confirmed'
+
+    WHERE id=?
+
+    """,(booking_id,))
+
+    conn.commit()
+
+    send_new_booking_to_tutor(
+
+        app,
+
+        booking["tutor_email"],
+
+        booking["tutor_name"],
+
+        booking["student_name"],
+
+        booking["lesson_date"],
+
+        booking["lesson_time"]
+
+    )
+
+    conn.close()
+
+    return "OK"
+
+    booking_id = request.form.get("custom_int1")
+
+    payment_status = request.form.get("payment_status")
+
+    if payment_status != "COMPLETE":
+
+        return "Payment not complete"
+
+    conn = get_connection()
+
+    booking = conn.execute("""
+
+    SELECT
+
+        bookings.*,
+
+        students.full_name AS student_name,
+        students.email AS student_email,
+
+        tutors.full_name AS tutor_name,
+        tutors.email AS tutor_email
+
+    FROM bookings
+
+    JOIN students
+        ON students.id = bookings.student_id
+
+    JOIN tutors
+        ON tutors.id = bookings.tutor_id
+
+    WHERE bookings.id=?
+
+    """,(booking_id,)).fetchone()
+
+    if not booking:
+
+        conn.close()
+
+        return "Booking not found"
+
+    conn.execute("""
+
+    UPDATE bookings
+
+    SET
+
+        payment_status='Paid',
+        status='Confirmed'
+
+    WHERE id=?
+
+    """,(booking_id,))
+
+    conn.commit()
+    
+    platform_fee = booking["amount"] * 0.20
+    tutor_amount = booking["amount"] - platform_fee
+
+    conn.execute("""
+
+    INSERT OR IGNORE INTO earnings(
+
+        booking_id,
+        tutor_id,
+        amount,
+        platform_fee,
+        tutor_amount
+
+    )
+
+    VALUES(?,?,?,?,?)
+
+    """,(
+
+        booking["id"],
+        booking["tutor_id"],
+        booking["amount"],
+        platform_fee,
+        tutor_amount
+
+    ))
+
+    conn.commit()
+
+    send_new_booking_to_tutor(
+
+        app,
+
+        booking["tutor_email"],
+
+        booking["tutor_name"],
+
+        booking["student_name"],
+
+        booking["lesson_date"],
+
+        booking["lesson_time"]
+
+    )
+
+    conn.close()
+
+    return "OK"
+
 
     booking_id = request.form.get("custom_int1")
     payment_status = request.form.get("payment_status")

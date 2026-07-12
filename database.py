@@ -149,49 +149,7 @@ def create_tables():
 
     """)
 
-    # ======================================================
-    # BOOKINGS
-    # ======================================================
-    cursor.execute("""
-
-    CREATE TABLE IF NOT EXISTS bookings(
-
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-
-    tutor_id INTEGER NOT NULL,
-
-    student_id INTEGER NOT NULL,
-
-    lesson_date TEXT,
-
-    lesson_time TEXT,
-
-    lesson_type TEXT,
-
-    lesson_duration TEXT,
-
-    lesson_price REAL,
-
-    payment_status TEXT DEFAULT 'Pending',
-
-    status TEXT DEFAULT 'Pending',
-
-    meeting_link TEXT,
-
-    notes TEXT,
-
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-
-    FOREIGN KEY(tutor_id) REFERENCES tutors(id),
-
-    FOREIGN KEY(student_id) REFERENCES students(id)
-
-)
-
-""")
-
-    cursor.execute("DROP TABLE IF EXISTS bookings")
-
+   
     # ======================================================
     # REVIEWS
     # ======================================================
@@ -234,36 +192,7 @@ def create_tables():
 )
 
 """)
-    cursor.execute("""
 
-    CREATE TABLE IF NOT EXISTS bookings(
-
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-
-    student_id INTEGER,
-
-    tutor_id INTEGER,
-
-    lesson_date TEXT,
-
-    lesson_time TEXT,
-
-    subject TEXT,
-
-    message TEXT,
-     
-    amount REAL DEFAULT 0, 
-     
-    status TEXT DEFAULT 'Pending',
-
-    payment_status TEXT DEFAULT 'Pending',
-
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-
-)
-
-""")    
-    
     cursor.execute("""
 
 CREATE TABLE IF NOT EXISTS tutor_availability(
@@ -284,7 +213,69 @@ CREATE TABLE IF NOT EXISTS tutor_availability(
 )
 
 """)
+        
+    cursor.execute("""
+
+CREATE TABLE IF NOT EXISTS earnings(
+
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+
+    booking_id INTEGER UNIQUE,
+
+    tutor_id INTEGER,
+
+    amount REAL,
+
+    platform_fee REAL,
+
+    tutor_amount REAL,
+
+    status TEXT DEFAULT 'Pending',
+
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+
+)
+
+""")
+    
+    cursor.execute("""
+
+    CREATE TABLE IF NOT EXISTS bookings(
+
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+
+        student_id INTEGER NOT NULL,
+
+        tutor_id INTEGER NOT NULL,
+
+        lesson_date TEXT NOT NULL,
+
+        lesson_time TEXT NOT NULL,
+
+        subject TEXT,
+
+        message TEXT,
+
+        amount REAL DEFAULT 0,
+
+        payment_status TEXT DEFAULT 'Pending',
+
+        status TEXT DEFAULT 'Pending',
+
+        meeting_link TEXT,
+
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+        FOREIGN KEY(student_id)
+        REFERENCES students(id),
+
+        FOREIGN KEY(tutor_id)
+        REFERENCES tutors(id)
+
+    )
+
+    """)        
 
     conn.commit()
     conn.close()
-    
+        
