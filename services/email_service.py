@@ -60,9 +60,9 @@ def send_activation_email(
 
         msg = Message(
             subject="Activate Your MoreKnowledgeAcademy Tutor Account",
+            sender=app.config["MAIL_DEFAULT_SENDER"],
             recipients=[tutor_email]
-        )
-
+)
         msg.body = f"""
 Dear {tutor_name},
 

@@ -36,13 +36,65 @@ href="{{ url_for('static', filename='css/style.css') }}">
 
 <p>{{ booking.message }}</p>
 
-<a href="/accept-booking/{{ booking.id }}">
-<button>Accept</button>
-</a>
+<p>
 
-<a href="/decline-booking/{{ booking.id }}">
-<button>Decline</button>
-</a>
+<b>Payment:</b>
+
+{% if booking.payment_status == "Paid" %}
+
+🟢 Paid
+
+{% else %}
+
+🟠 Pending
+
+{% endif %}
+
+</p>
+
+<p>
+
+<b>Status:</b>
+
+{{ booking.status }}
+
+</p>
+
+{% if booking.payment_status == "Paid" %}
+
+    {% if booking.status == "Pending" %}
+
+        <a class="btn" href="/accept-booking/{{ booking.id }}">
+            Accept
+        </a>
+
+        <a class="btn btn-danger" href="/decline-booking/{{ booking.id }}">
+            Decline
+        </a>
+
+    {% elif booking.status == "Accepted" %}
+
+        <span class="badge badge-success">
+            Accepted
+        </span>
+
+    {% elif booking.status == "Declined" %}
+
+        <span class="badge badge-danger">
+            Declined
+        </span>
+
+    {% endif %}
+
+{% else %}
+
+    <span class="badge badge-warning">
+
+        Waiting for Student Payment
+
+    </span>
+
+{% endif %}
 
 <a href="/create-meeting/{{ booking.id }}">
 <button>Create Meeting</button>
